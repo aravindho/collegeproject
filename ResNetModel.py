@@ -69,8 +69,8 @@ transform = transforms.Compose([
 ])
 
 # Load your dataset
-images_folder = "C:/Users/My pc/Downloads/collegeproject-master/collegeproject-master/train/images"
-labels_folder = "C:/Users/My pc/Downloads/collegeproject-master/collegeproject-master/train/labels"
+images_folder = r"C:\Users\My pc\Downloads\collegeproject-main\collegeproject-main\train\images"
+labels_folder = r"C:\Users\My pc\Downloads\collegeproject-main\collegeproject-main\train\labels"
 dataset = CustomDataset(images_folder, labels_folder, transform=transform)
 train_loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
