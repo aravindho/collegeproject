@@ -1,3 +1,4 @@
+#pre-trained ResNet18 model 
 import os
 from PIL import Image
 import torch
