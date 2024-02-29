@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
-import sc
+
 # Define your FCRNN model class
 class FCRNN(nn.Module):
     def __init__(self, num_classes):
@@ -138,6 +138,10 @@ for epoch in range(num_epochs):
     ap_list.append(ap)
 
     print(f"Epoch {epoch+1}, Loss: {total_loss / len(train_loader)}, Accuracy: {accuracy}, Precision: {precision}, Recall: {recall}, F1: {f1}, AP: {ap}")
+
+# Save the trained model
+torch.save(model.state_dict(), "rfcnn.pth")
+print("Model saved successfully.")
 
 # Plotting the confusion matrix
 plt.figure(figsize=(8, 6))
