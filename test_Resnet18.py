@@ -2,10 +2,10 @@ import os
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
-from s import ResNetModel  # Importing the ResNetModel from s.py
-
-# Define the test image path
-test_image_path = "C:/Users/My pc/Documents/ResNet/test/images/1 (18).jpg"  # Assuming the test image is in the same folder
+# from s import ResNetModel  # Importing the ResNetModel from s.py
+from resnet import ResNetModel
+# Define the test image path with your new address
+test_image_path = r"C:\Users\nirma\OneDrive\Desktop\models\NASAL_BONE.v4i.yolov5pytorch\test\images\a-5-_png_jpg.rf.3c8520af21b50c3d5c7582881abdb6d2.jpg"  # Assuming the test image is in the same folder
 
 # Define a transform to normalize the image
 transform = transforms.Compose([
