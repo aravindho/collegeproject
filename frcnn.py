@@ -4,26 +4,27 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
-from sklearn.metrics import precision_recall_curve, average_precision_score, confusion_matrix, ConfusionMatrixDisplay
 import numpy as np
 import matplotlib.pyplot as plt
-
-# Define your model class
-class CustomModel(nn.Module):
+import sc
+# Define your FCRNN model class
+class FCRNN(nn.Module):
     def __init__(self, num_classes):
-        super(CustomModel, self).__init__()
+        super(FCRNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 16, 3, 1)
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(16, 32, 3, 1)
-        self.fc1 = nn.Linear(32 * 54 * 54, 128)
-        self.fc2 = nn.Linear(128, num_classes)
+        self.gru = nn.GRU(32 * 54 * 54, 128, batch_first=True)
+        self.fc = nn.Linear(128, num_classes)
 
     def forward(self, x):
         x = self.pool(nn.functional.relu(self.conv1(x)))
         x = self.pool(nn.functional.relu(self.conv2(x)))
         x = x.view(-1, 32 * 54 * 54)
-        x = nn.functional.relu(self.fc1(x))
-        x = self.fc2(x)
+        x = x.unsqueeze(1)  # Add a time dimension
+        x, _ = self.gru(x)
+        x = x[:, -1, :]  # Get the last output of the GRU
+        x = self.fc(x)
         return x
 
 # Define your custom dataset class
@@ -83,12 +84,12 @@ transform = transforms.Compose([
 ])
 
 # Load your dataset
-root_dir = r"C:\Users\My pc\Documents\ResNet\train"
+root_dir = r"C:\Users\nirma\OneDrive\Desktop\models\NASAL_BONE.v4i.yolov5pytorch\train"
 dataset = CustomDataset(root_dir, transform=transform)
 train_loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 # Initialize model, loss function, and optimizer
-model = CustomModel(num_classes=len(dataset.classes))
+model = FCRNN(num_classes=len(dataset.classes))
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
